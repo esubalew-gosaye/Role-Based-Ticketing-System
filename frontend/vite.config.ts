@@ -18,4 +18,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://role-based-ticketing-system.vercel.app',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });

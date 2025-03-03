@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from '@/lib/axiosInterceptor';
 
-const API_URL = 'http://localhost:4000/api/auth'; // Replace with your backend URL
+const API_URL = 'http://localhost:4000/api/auth'; 
 
 export const login = async (email: string, password: string) => {
   const response = await axios.post(`${API_URL}/login`, { email, password });

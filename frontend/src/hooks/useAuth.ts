@@ -11,7 +11,7 @@ import {
   verifyForgotPasswordCode as verifyForgotPasswordCodeService,
   changePassword as changePasswordService,
   logout as logoutService,
-} from '../src/services/authService';
+} from '@/services/authService';
 
 interface CustomJwtPayload extends JwtPayload {
     role: string;

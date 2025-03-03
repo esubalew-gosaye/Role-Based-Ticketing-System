@@ -69,7 +69,6 @@ const TicketList = ({ isAdmin }: TicketListProps) => {
     try {
       await TicketService.updateTicket(ticketId, {"status": newStatus});
       toast.success('Ticket status updated successfully');
-      // Refresh the ticket list after updating the status
       const data = await TicketService.getTickets();
       setTickets(data.data);
     } catch (err) {

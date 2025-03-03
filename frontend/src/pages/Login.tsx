@@ -19,7 +19,6 @@ const Login = () => {
       <div className="bg-white px-8 py-6 rounded-lg shadow-md w-96 mt-20">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         
-        {/* Display error message if login fails */}
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit}>
@@ -52,7 +51,6 @@ const Login = () => {
           </Button>
         </form>
 
-        {/* Forgot Password & Create Account Links */}
         <div className="text-center mt-4 text-sm text-gray-600">
           <Link to="/forgot-password" className="text-blue-500 hover:underline">
             Forgot Password?

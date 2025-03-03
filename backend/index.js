@@ -12,14 +12,27 @@ import sendEmailForInactive from './utils/automatedEmail.js';
 
 const app = express();
 
-cors({
+app.use(cors({
     origin: "https://role-based-ticketing-system-frontend.vercel.app",
     methods: "GET, POST, PUT, DELETE, OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
     credentials: true, // If using cookies or authentication headers
-  })
-app.use(helmet())
-app.use(cookieParser())
+  }))
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "https://role-based-ticketing-system-frontend.vercel.app");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
+    }
+    
+    next();
+  });
+  
+// app.use(helmet())
+// app.use(cookieParser())
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())

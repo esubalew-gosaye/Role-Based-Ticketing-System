@@ -1,83 +1,102 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select'; // Assuming you have this Select component
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'; // Assuming you have this Select component
 import { Link, Navigate } from 'react-router-dom';
-import axios from '@/lib/axiosInterceptor';
+import { useAuth } from '@/hooks/useAuth';
 
-class Signup extends Component {
+const Signup = () => {
+  const { signUp, loading, error } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('USER');
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  render() {
-    
-    return (
-      <div className="min-h-screen flex items-start justify-center bg-gray-100">
-        <div className="bg-white px-8 py-6 rounded-lg shadow-md w-96 mt-20">
-          <h2 className="text-2xl font-bold mb-6 text-center">Signup</h2>
+    if (!email || !password || !role) {
+      return;
+    }
 
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+    await signUp(email, password, role);
+  };
 
-          <form onSubmit={this.handleSubmit}>
-            <div className="mb-4">
-              <Input
-                type="email"
-                placeholder="Email"
-                name="email"
-                value={email}
-                onChange={this.handleChange}
-                className="w-full"
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <Input
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={password}
-                onChange={this.handleChange}
-                className="w-full"
-                required
-              />
-            </div>
+  return (
+    <div className="min-h-screen flex items-start justify-center bg-gray-100">
+      <div className="bg-white px-8 py-6 rounded-lg shadow-md w-96 mt-20">
+        <h2 className="text-2xl font-bold mb-6 text-center">Signup</h2>
 
-            <div className="mb-6">
-              <Select
-                name="role"
-                value={role}
-                onChange={this.handleChange}
-                className="w-full"
-                required
-              >
-                <option value="" disabled>
-                  Select Role
-                </option>
-                <option value="admin">ADMIN</option>
-                <option value="user">USER</option>
-              </Select>
-            </div>
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-            <Button
-              type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white mb-4"
-              disabled={loading}
-            >
-              {loading ? 'Signing up...' : 'Signup'}
-            </Button>
-          </form>
-
-          <div className="text-center mt-4 text-sm text-gray-600">
-            <p>
-              Already have an account?{' '}
-              <Link to="/login" className="text-blue-500 hover:underline">
-                Login
-              </Link>
-            </p>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full"
+              required
+            />
           </div>
+          <div className="mb-6">
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <Select
+              value={role}
+              onValueChange={setRole}
+              
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select Role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Roles</SelectLabel>
+                  <SelectItem value="ADMIN">ADMIN</SelectItem>
+                  <SelectItem value="USER">USER</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white mb-4"
+            disabled={loading}
+          >
+            {loading ? 'Signing up...' : 'Signup'}
+          </Button>
+        </form>
+
+        <div className="text-center mt-4 text-sm text-gray-600">
+          <p>
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-500 hover:underline">
+              Login
+            </Link>
+          </p>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Signup;

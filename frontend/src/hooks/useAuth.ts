@@ -47,7 +47,12 @@ export const useAuth = () => {
     setLoading(true);
     try {
       const response = await signUpService(email, password, role);
-      navigate('/verify-email', { state: { email } });
+      if (response.success == false) {
+        setError(response.message);
+        return;
+      }else{
+        navigate('/login');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Signup failed');
     } finally {

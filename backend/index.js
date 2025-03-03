@@ -27,10 +27,6 @@ app.use("/api/users/", userRouter)
 // send automated email for inactive users to activate their account
 // sendEmailForInactive(); 
 
-app.use("/", (req, res) =>{
-    res.status(200).json({"deployed": true})
-})
-
 app.listen(process.env.PORT, () => {
     logger.debug(`Listing on http://localhost:${process.env.PORT}`);
 }).on('error', (err) => {

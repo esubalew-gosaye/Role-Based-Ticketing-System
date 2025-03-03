@@ -20,8 +20,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
-        target: 'https://role-based-ticketing-system.vercel.app',
+      "/api": {
+        target: "https://role-based-ticketing-system.vercel.app",
         changeOrigin: true,
         secure: false,
       },

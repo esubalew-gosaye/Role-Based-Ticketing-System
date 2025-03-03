@@ -11,7 +11,7 @@ export default (req, res, next) => {
         }
 
         const bearerToken = token.split(" ")[1];
-        const jwtVerified = jwt.verify(bearerToken, process.env.JWT_SECRET);
+        const jwtVerified = jwt.verify(bearerToken, "process.env.JWT_SECRET");
 
         if (!jwtVerified) {
             return res.status(403).json({ success: false, message: "Invalid bearer token." });

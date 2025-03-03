@@ -45,9 +45,13 @@ const getTickets = async (req, res) => {
     }
 
     if (userRole.role === 'ADMIN') {
-      tickets = await db.ticket.findMany({ where: {active: false } });
+      tickets = await db.ticket.findMany({ where: {active: false }, include: {
+        user: {select: {email: true, role: true}},
+      } });
     } else {
-      tickets = await db.ticket.findMany({ where: { userId: req.user.id, active: false } });
+      tickets = await db.ticket.findMany({ where: { userId: req.user.id, active: false }, include: {
+        user: {select: {email: true, role: true}},
+      } });
     }
 
     res.status(200).json({
@@ -116,7 +120,7 @@ const deleteTicket = async (req, res) => {
     } 
     await db.ticket.update({
       where: { id },
-      data: { active: false},
+      data: { active: true},
     });
 
     res.status(200).json({

@@ -79,7 +79,7 @@ const login = async (req, res) => {
         role: existingUser.role,
         verified: existingUser.verified,
       },
-      process.env.JWT_SECRET,
+      "process.env.JWT_SECRET",
       { expiresIn: '8h' }
     );
 
@@ -139,7 +139,7 @@ const sendVerificationCode = async (req, res) => {
       res.status(400).json({ success: false, message: 'Code sent failed!' });
     }
 
-    const hashedCode = hashCode(code, process.env.HMAC_SECRET);
+    const hashedCode = hashCode(code, "secret");
 
     await db.user.update({ where: {id: existingUser.id}, data: { verificationCode: hashedCode, verificationCodeValidation: Date.now() }})
 
@@ -195,7 +195,7 @@ const verifyVerificationCode = async (req, res) => {
         .status(400)
         .json({ success: false, message: 'Verification code expired!' });
     }
-    const hashedCode = hashCode(code, process.env.HMAC_SECRET);
+    const hashedCode = hashCode(code, "secret");
     if (hashedCode !== existingUser.verificationCode) {
       return res
         .status(401)
@@ -248,7 +248,7 @@ const sendForgotPasswordCode = async (req, res) => {
     }
 
     // hash the code using HMAC
-    const hashedCode = hashCode(code, process.env.HMAC_SECRET);
+    const hashedCode = hashCode(code, "secret");
     await db.user.update({where: {id: existingUser.id}, data: {forgotPasswordCode: hashedCode, forgotPasswordValidation: Date.now()}})
 
     res.status(200).json({
@@ -302,7 +302,7 @@ const verifyForgotPasswordCode = async (req, res) => {
         .json({ success: false, message: 'Reset password code expired' });
     }
 
-    const hashedCode = hashCode(code, process.env.HMAC_SECRET);
+    const hashedCode = hashCode(code, "secret");
     if (hashedCode !== existingUser.forgotPasswordCode) {
       return res
         .status(401)

@@ -1,6 +1,6 @@
 import axios from '@/lib/axiosInterceptor';
 
-const API_URL = 'http://localhost:4000/api/auth'; 
+const API_URL = 'https://role-based-ticketing-system.vercel.app/api/auth'; 
 
 export const login = async (email: string, password: string) => {
   const response = await axios.post(`${API_URL}/login`, { email, password });

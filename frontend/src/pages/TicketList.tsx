@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { toast, Toaster } from 'sonner';
+import {  } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -8,10 +11,16 @@ import {
   TableBody,
   TableCell,
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'; 
 import TicketService from '@/services/ticketService';
 
 interface Ticket {
-  id: number;
+  id: string;
   title: string;
   status: string;
   description: string;
@@ -25,6 +34,12 @@ interface Ticket {
 
 interface TicketListProps {
   isAdmin?: boolean;
+}
+
+enum TicketStatus {
+  OPEN = 'OPEN',
+  IN_PROGRESS = 'IN_PROGRESS',
+  CLOSED = 'CLOSED',
 }
 
 const TicketList = ({ isAdmin }: TicketListProps) => {
@@ -49,6 +64,19 @@ const TicketList = ({ isAdmin }: TicketListProps) => {
     fetchTickets();
   }, []);
 
+  // Handle status update
+  const handleStatusUpdate = async (ticketId: string, newStatus: TicketStatus) => {
+    try {
+      await TicketService.updateTicket(ticketId, {"status": newStatus});
+      toast.success('Ticket status updated successfully');
+      // Refresh the ticket list after updating the status
+      const data = await TicketService.getTickets();
+      setTickets(data.data);
+    } catch (err) {
+      console.error('Failed to update ticket status:', err);
+    }
+  };
+
   if (loading) {
     return <div>Loading tickets...</div>;
   }
@@ -59,7 +87,7 @@ const TicketList = ({ isAdmin }: TicketListProps) => {
 
   return (
     <>
-      <div>Total Count: {tickets? tickets.length : 0}</div>
+      <div>Total Count: {tickets ? tickets.length : 0}</div>
       <div className="border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
@@ -82,10 +110,9 @@ const TicketList = ({ isAdmin }: TicketListProps) => {
                   <TableCell className="whitespace-pre-line break-words max-w-xs">
                     {ticket.description}
                   </TableCell>
-
                   <TableCell>
                     <span
-                      className={`px-2 py-1 rounded-full text-sm ${
+                      className={`px-3 py-2 rounded-full text-sm ${
                         ticket.status === 'OPEN'
                           ? 'bg-green-100 text-green-800'
                           : ticket.status === 'IN_PROGRESS'
@@ -104,15 +131,46 @@ const TicketList = ({ isAdmin }: TicketListProps) => {
                   </TableCell>
                   {isAdmin && (
                     <TableCell>
-                      <Button size="sm" variant="outline">
-                        Update Status
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button size="sm" variant="outline" className='bg-green-700 cursor-pointer hover:bg-green-600'>
+                            Update Status
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleStatusUpdate(ticket.id, TicketStatus.OPEN)
+                            }
+                          >
+                            Open
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleStatusUpdate(
+                                ticket.id,
+                                TicketStatus.IN_PROGRESS,
+                              )
+                            }
+                          >
+                            In Progress
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleStatusUpdate(ticket.id, TicketStatus.CLOSED)
+                            }
+                          >
+                            Closed
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   )}
                 </TableRow>
               ))}
           </TableBody>
         </Table>
+        <Toaster  position='top-center'/>
       </div>
     </>
   );

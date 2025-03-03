@@ -36,6 +36,8 @@ class TicketService {
   async updateTicket(ticketId: string, ticketData: any) {
     try {
       const response = await axios.put(`/tickets/${ticketId}`, ticketData);
+      console.log(ticketData)
+      console.log(response)
       return response.data;
     } catch (error) {
       console.error('Error updating ticket:', error);

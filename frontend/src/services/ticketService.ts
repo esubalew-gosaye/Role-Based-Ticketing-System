@@ -15,6 +15,7 @@ class TicketService {
   async getTickets() {
     try {
       const response = await axios.get('/tickets');
+      console.log(response)
       return response.data;
     } catch (error) {
       console.error('Error fetching tickets:', error);

@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("mongodb+srv://mesaye:TXuv0ckrf0SAWA6y@cluster0.czpxd.mongodb.net/ticketing-system?retryWrites=true&w=majority&appName=Cluster0")
+  url      = "mongodb+srv://mesaye:TXuv0ckrf0SAWA6y@cluster0.czpxd.mongodb.net/ticketing-system?retryWrites=true&w=majority&appName=Cluster0"
 }
 
 enum Role {

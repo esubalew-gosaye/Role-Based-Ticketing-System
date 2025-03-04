@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
 
 import authRouter from './routers/authRouter.js';
 import ticketRouter from './routers/ticketRouter.js';

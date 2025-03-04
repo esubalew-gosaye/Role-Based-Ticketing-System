@@ -12,42 +12,53 @@ import userRouter from './routers/userRouter.js';
 
 const app = express();
 
-app.use(cors({
-    origin: "https://role-based-ticketing-system-frontend.vercel.app",
-    methods: "GET, POST, PUT, DELETE, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-    credentials: true, 
-  }))
-  app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "https://role-based-ticketing-system-frontend.vercel.app");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
+app.use(
+  cors({
+    origin: 'https://role-based-ticketing-system-frontend.vercel.app',
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  })
+);
+app.use((req, res, next) => {
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://role-based-ticketing-system-frontend.vercel.app'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    next();
-  });
-  
+  next();
+});
+
+app.options('*', cors());
+
 // app.use(helmet())
 // app.use(cookieParser())
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // app.use(requestLogger)
 
-app.use("/api/auth/", authRouter)
-app.use("/api/tickets/", ticketRouter)
-app.use("/api/users/", userRouter)
-
+app.use('/api/auth/', authRouter);
+app.use('/api/tickets/', ticketRouter);
+app.use('/api/users/', userRouter);
 
 // send automated email for inactive users to activate their account
-// sendEmailForInactive(); 
-app.get("/", (req, res) => {
-    res.send("Welcome to Role-Based Ticketing System");
-  });
-  
-app.listen(process.env.PORT, () => {
+// sendEmailForInactive();
+app.get('/', (req, res) => {
+  res.send('Welcome to Role-Based Ticketing System');
+});
+
+app
+  .listen(process.env.PORT, () => {
     console.log(`Listing on http://localhost:${process.env.PORT}`);
-}).on('error', (err) => {
+  })
+  .on('error', (err) => {
     console.error(`server error: ${err.message}`);
     process.exit(1);
-})
+  });

@@ -37,7 +37,7 @@ export const useAuth = () => {
       localStorage.setItem('token', response.data);
       navigate(`/${role}-dashboard`);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
